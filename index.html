@@ -123,11 +123,14 @@
   .role-table td { color: var(--text-2); line-height: 1.7; }
 
   /* === Step cards === */
-  .step-stack { display: flex; flex-direction: column; gap: 16px; }
+  .step-stack { display: flex; flex-direction: column; gap: 18px; }
   .step-card {
     background: #fff; border: var(--border); border-radius: var(--r-lg);
-    box-shadow: var(--card-shadow); padding: 22px 26px;
+    box-shadow: var(--card-shadow); padding: 24px 28px;
+  }
+  .step-head {
     display: grid; grid-template-columns: 64px 1fr; gap: 22px; align-items: start;
+    margin-bottom: 14px;
   }
   .step-num {
     width: 56px; height: 56px; border-radius: 14px;
@@ -145,6 +148,17 @@
     word-break: break-all;
   }
   .step-body .note { color: var(--text-3); font-size: 12.5px; font-style: italic; margin-top: 6px; }
+  .step-capture {
+    margin-top: 12px; border-radius: 12px; overflow: hidden;
+    border: 1px solid rgba(60, 40, 10, 0.1);
+    box-shadow: 0 4px 16px rgba(60, 40, 10, 0.08);
+    background: #fff;
+  }
+  .step-capture img { display: block; width: 100%; height: auto; }
+  .step-caption {
+    font-size: 12px; color: var(--text-3); margin-top: 8px;
+    text-align: center; font-weight: 500;
+  }
 
   /* === Q-table === */
   .qa-table-wrap { background: #fff; border: var(--border); border-radius: var(--r-lg); box-shadow: var(--card-shadow); overflow: hidden; }
@@ -186,7 +200,9 @@
   @media (max-width: 640px) {
     .t-hero { font-size: 32px; }
     .container { padding: 16px 14px 64px; }
-    .step-card { grid-template-columns: 1fr; }
+    .step-head { grid-template-columns: 48px 1fr; gap: 14px; }
+    .step-num { width: 44px; height: 44px; }
+    .step-num strong { font-size: 19px; }
     .role-table th, .role-table td, .qa-table th, .qa-table td { padding: 12px 14px; font-size: 13px; }
   }
 </style>
@@ -285,67 +301,93 @@
   <div class="step-stack">
 
     <article class="step-card rise">
-      <div class="step-num"><span>STEP</span><strong>1</strong></div>
-      <div class="step-body">
-        <h3>本番 URL を開く</h3>
-        <p>ブラウザで以下の URL にアクセスしてください。</p>
-        <span class="url-code">https://light-survey.light-5d5.workers.dev/</span>
-        <p class="note">ブックマーク登録しておくと次回からアクセスがスムーズです</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>1</strong></div>
+        <div class="step-body">
+          <h3>本番 URL を開く</h3>
+          <p>ブラウザで以下の URL にアクセスしてください。</p>
+          <span class="url-code">https://light-survey.light-5d5.workers.dev/</span>
+          <p class="note">ブックマーク登録しておくと次回からアクセスがスムーズです</p>
+        </div>
       </div>
     </article>
 
     <article class="step-card rise rise-2">
-      <div class="step-num"><span>STEP</span><strong>2</strong></div>
-      <div class="step-body">
-        <h3>Google アカウントでサインイン</h3>
-        <p>「Google でログイン」ボタンを押すと Google のアカウント選択画面に進みます。<strong>@light-inc.com</strong> の会社アカウントを選択してログインしてください。</p>
-        <p class="note">個人 Gmail ではログインできません。必ず会社の Google アカウントを使用してください</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>2</strong></div>
+        <div class="step-body">
+          <h3>Google アカウントでサインイン</h3>
+          <p>「Google でログイン」ボタンを押すと Google のアカウント選択画面に進みます。<strong>@light-inc.com</strong> の会社アカウントを選択してログインしてください。</p>
+          <p class="note">個人 Gmail ではログインできません。必ず会社の Google アカウントを使用してください</p>
+        </div>
       </div>
+      <div class="step-capture"><img src="step2-login.png" alt="ログイン画面" loading="lazy"></div>
+      <div class="step-caption">「Google アカウントでログイン」ボタンを押す</div>
     </article>
 
     <article class="step-card rise rise-3">
-      <div class="step-num"><span>STEP</span><strong>3</strong></div>
-      <div class="step-body">
-        <h3>ホーム画面に到達</h3>
-        <p>ログインに成功すると、自分のロールに応じたホーム画面が表示されます。左上に自分の名前と所属チームが見えればOKです。</p>
-        <p class="note">ロール表示が違う場合は管理者（Slack: #light-survey）までご連絡ください</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>3</strong></div>
+        <div class="step-body">
+          <h3>ホーム画面に到達</h3>
+          <p>ログインに成功すると、自分のロールに応じたホーム画面が表示されます。左下に自分の名前と所属ロールが見えればOKです。</p>
+          <p class="note">ロール表示が違う場合は管理者（Slack: #light-survey）までご連絡ください</p>
+        </div>
       </div>
+      <div class="step-capture"><img src="step3-home.png" alt="ホーム画面" loading="lazy"></div>
+      <div class="step-caption">今月のサーベイカードと回答状況が表示される</div>
     </article>
 
     <article class="step-card rise rise-4">
-      <div class="step-num"><span>STEP</span><strong>4</strong></div>
-      <div class="step-body">
-        <h3>サーベイページを開く</h3>
-        <p>左メニューの「サーベイ」をクリック。当月のサーベイカードが表示されます。</p>
-        <p class="note">サーベイカードに「未回答」が表示されている期間内のものを選んでください</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>4</strong></div>
+        <div class="step-body">
+          <h3>サーベイページを開く</h3>
+          <p>左メニューの「サーベイ」をクリック。当月のサーベイカードが表示されます。</p>
+          <p class="note">「回答中」または「未回答」が表示されている期間内のものを選んでください</p>
+        </div>
       </div>
+      <div class="step-capture"><img src="step4-survey-list.png" alt="サーベイ一覧画面" loading="lazy"></div>
+      <div class="step-caption">サーベイ一覧から今月分を選択</div>
     </article>
 
     <article class="step-card rise rise-5">
-      <div class="step-num"><span>STEP</span><strong>5</strong></div>
-      <div class="step-body">
-        <h3>設問に答える（選択肢を押すだけ）</h3>
-        <p>チャット形式で設問が表示されます。しっくりくる選択肢を1つ押してください。次の設問に自動で進みます。</p>
-        <p class="note">各設問は4段階（とても感じている / 概ね / 少し / 感じていない 等）</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>5</strong></div>
+        <div class="step-body">
+          <h3>設問に答える（選択肢を押すだけ）</h3>
+          <p>チャット形式で設問が表示されます。しっくりくる選択肢を1つ押してください。次の設問に自動で進みます。</p>
+          <p class="note">各設問は4段階（とても感じている / 概ね / 少し / 感じていない 等）。上記に当てはまらない場合は下部に自由入力もできます</p>
+        </div>
       </div>
+      <div class="step-capture"><img src="step5-question.png" alt="設問画面" loading="lazy"></div>
+      <div class="step-caption">4択から選ぶか、自由入力で回答</div>
     </article>
 
     <article class="step-card rise rise-5">
-      <div class="step-num"><span>STEP</span><strong>6</strong></div>
-      <div class="step-body">
-        <h3>自由記述（任意）</h3>
-        <p>最後にリーダーへ伝えたいことがあれば入力欄に記入してください。特にない場合は「特になし」ボタンを押せばOKです。</p>
-        <p class="note">自由記述はリーダー本人と一部の権限者のみが閲覧します</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>6</strong></div>
+        <div class="step-body">
+          <h3>自由記述（任意）</h3>
+          <p>最後にリーダーへ伝えたいことがあれば入力欄に記入してください。特にない場合は「特になし」ボタンを押せばOKです。</p>
+          <p class="note">自由記述はリーダー本人と一部の権限者のみが閲覧します</p>
+        </div>
       </div>
+      <div class="step-capture"><img src="step6-freetext.png" alt="自由記述画面" loading="lazy"></div>
+      <div class="step-caption">「特になし」または自由入力で送信</div>
     </article>
 
     <article class="step-card rise rise-5">
-      <div class="step-num"><span>STEP</span><strong>7</strong></div>
-      <div class="step-body">
-        <h3>送信して完了</h3>
-        <p>全設問に回答し終えると完了画面に移ります。「回答を送信して終了」ボタンを押すと、回答が保存されます。</p>
-        <p class="note">送信後も期間内なら何度でも修正可能です</p>
+      <div class="step-head">
+        <div class="step-num"><span>STEP</span><strong>7</strong></div>
+        <div class="step-body">
+          <h3>送信して完了</h3>
+          <p>全設問に回答し終えると完了画面に移ります。「回答を送信して終了」ボタンを押すと、回答が保存されます。</p>
+          <p class="note">送信後も期間内なら何度でも修正可能です</p>
+        </div>
       </div>
+      <div class="step-capture"><img src="step7-complete.png" alt="送信完了画面" loading="lazy"></div>
+      <div class="step-caption">「回答を送信して終了」ボタンで完了</div>
     </article>
 
   </div>
