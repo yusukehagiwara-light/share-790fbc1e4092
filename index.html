@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Light Survey 利用ガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF9600;
+    --orange-deep: #e67d00;
+    --orange-light: #ffb84d;
+    --orange-pale: #fff5e8;
+    --cream: #faf6f2;
+    --yellow-pale: #fff8d6;
+    --bg: #ffffff;
+    --bg-soft: #f7f4f0;
+
+    --text: #333333;
+    --text-2: #666666;
+    --text-3: #999999;
+    --text-faint: #cccccc;
+
+    --teal: #4ab8aa;
+    --blue: #5ba4d9;
+    --purple: #b87aae;
+    --pink: #e86bab;
+    --green: #6bc9a0;
+    --rose: #e86b6b;
+
+    --card-shadow: 0 1px 2px rgba(60, 40, 10, 0.04), 0 8px 24px rgba(60, 40, 10, 0.05);
+    --card-shadow-hover: 0 2px 4px rgba(60, 40, 10, 0.06), 0 14px 36px rgba(60, 40, 10, 0.08);
+    --border: 1px solid rgba(60, 40, 10, 0.08);
+    --border-strong: 1px solid rgba(60, 40, 10, 0.12);
+    --r-sm: 10px;
+    --r-md: 16px;
+    --r-lg: 22px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body { margin: 0; }
+  body {
+    font-family: 'M PLUS Rounded 1c', system-ui, sans-serif;
+    color: var(--text);
+    background: var(--bg-soft);
+    background-image:
+      radial-gradient(circle at 8% 6%, rgba(255, 150, 0, 0.10) 0%, transparent 40%),
+      radial-gradient(circle at 92% 10%, rgba(255, 184, 77, 0.10) 0%, transparent 42%),
+      radial-gradient(circle at 12% 92%, rgba(245, 215, 110, 0.10) 0%, transparent 40%),
+      radial-gradient(circle at 88% 88%, rgba(255, 230, 200, 0.18) 0%, transparent 40%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 96px; }
+
+  .nav-top {
+    position: sticky; top: 16px; z-index: 50;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255, 150, 0, 0.18);
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(60, 40, 10, 0.05);
+    padding: 10px 22px; display: flex; align-items: center; gap: 14px;
+    margin: 0 auto 32px; max-width: 1040px;
+  }
+  .nav-top .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14px; color: var(--text); }
+  .nav-top .brand::before { content: ""; width: 10px; height: 10px; background: var(--orange); border-radius: 3px; transform: rotate(45deg); }
+  .nav-top .sep { color: var(--text-faint); font-weight: 500; }
+  .nav-top .crumbs { color: var(--text-2); font-size: 13px; font-weight: 500; }
+  .nav-top .spacer { flex: 1; }
+  .nav-top .meta { font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; font-weight: 500; }
+
+  header.page { margin: 8px 4px 28px; }
+  .t-hero { font-size: 46px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 12px; line-height: 1.18; }
+  .t-hero .accent { color: var(--orange); }
+  .lede { color: var(--text-2); font-size: 17px; max-width: 820px; line-height: 1.7; margin: 0; font-weight: 500; }
+  .meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 22px 0 0; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em;
+    padding: 5px 11px; border-radius: 999px;
+    background: rgba(60, 40, 10, 0.05); color: var(--text-2); white-space: nowrap;
+  }
+  .pill-orange { background: var(--orange-pale); color: var(--orange-deep); }
+  .pill-yellow { background: var(--yellow-pale); color: #8a6a00; border: 1px solid rgba(245, 215, 110, 0.5); }
+
+  .sec-head { margin: 56px 4px 18px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .sec-head .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 10px;
+    background: var(--orange); color: #fff; font-weight: 900; font-size: 16px; transform: rotate(-2deg);
+  }
+  .sec-head h2 { margin: 0; font-size: 26px; font-weight: 900; letter-spacing: -0.01em; }
+  .sec-head .sub { margin: 0; color: var(--text-3); font-size: 13px; font-weight: 500; }
+
+  /* === Purpose cards === */
+  .purpose-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .purpose-card {
+    background: #fff; border: var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--card-shadow); padding: 24px 26px;
+  }
+  .purpose-card .icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--orange-pale); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; font-size: 22px;
+  }
+  .purpose-card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 800; line-height: 1.45; }
+  .purpose-card p { margin: 0; color: var(--text-2); font-size: 13.5px; line-height: 1.7; }
+
+  /* === Role table === */
+  .role-table-wrap { background: #fff; border: var(--border); border-radius: var(--r-lg); box-shadow: var(--card-shadow); overflow: hidden; }
+  .role-table { width: 100%; border-collapse: collapse; }
+  .role-table th, .role-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid rgba(60, 40, 10, 0.06); font-size: 14px; }
+  .role-table th { background: var(--orange-pale); color: var(--orange-deep); font-weight: 800; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .role-table tr:last-child td { border-bottom: none; }
+  .role-table td:first-child { font-weight: 800; white-space: nowrap; color: var(--text); }
+  .role-table td { color: var(--text-2); line-height: 1.7; }
+
+  /* === Step cards === */
+  .step-stack { display: flex; flex-direction: column; gap: 16px; }
+  .step-card {
+    background: #fff; border: var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--card-shadow); padding: 22px 26px;
+    display: grid; grid-template-columns: 64px 1fr; gap: 22px; align-items: start;
+  }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-deep) 100%);
+    color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+  }
+  .step-num strong { font-size: 24px; font-weight: 900; line-height: 1; }
+  .step-body h3 { margin: 0 0 6px; font-size: 17px; font-weight: 800; }
+  .step-body p { margin: 0 0 8px; color: var(--text-2); font-size: 14px; line-height: 1.75; }
+  .step-body .url-code {
+    display: inline-block; padding: 6px 12px; border-radius: 8px;
+    background: var(--bg-soft); border: var(--border);
+    font-family: ui-monospace, SFMono-Regular, monospace; font-size: 13px; color: var(--orange-deep);
+    word-break: break-all;
+  }
+  .step-body .note { color: var(--text-3); font-size: 12.5px; font-style: italic; margin-top: 6px; }
+
+  /* === Q-table === */
+  .qa-table-wrap { background: #fff; border: var(--border); border-radius: var(--r-lg); box-shadow: var(--card-shadow); overflow: hidden; }
+  .qa-table { width: 100%; border-collapse: collapse; }
+  .qa-table th, .qa-table td { padding: 18px 22px; text-align: left; border-bottom: 1px solid rgba(60, 40, 10, 0.06); font-size: 14px; vertical-align: top; }
+  .qa-table th { background: var(--orange-pale); color: var(--orange-deep); font-weight: 800; font-size: 12.5px; letter-spacing: 0.06em; }
+  .qa-table tr:last-child td { border-bottom: none; }
+  .qa-table td:first-child { font-weight: 800; white-space: nowrap; min-width: 110px; }
+  .qa-table td { color: var(--text-2); line-height: 1.75; }
+  .qa-table ol { margin: 0; padding-left: 18px; }
+  .qa-table ol li { margin-bottom: 4px; }
+
+  /* === Help section === */
+  .help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+  .help-card {
+    background: #fff; border: var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--card-shadow); padding: 22px 26px;
+  }
+  .help-card h3 { margin: 0 0 8px; font-size: 15px; font-weight: 800; color: var(--orange-deep); }
+  .help-card p { margin: 0; color: var(--text-2); font-size: 13.5px; line-height: 1.75; }
+
+  /* === Closing === */
+  .closing {
+    margin: 64px 4px 0; padding: 48px 32px; text-align: center;
+    background: linear-gradient(135deg, var(--orange-pale) 0%, var(--yellow-pale) 100%);
+    border-radius: var(--r-lg); border: 1px solid rgba(255, 150, 0, 0.2);
+  }
+  .closing h2 { margin: 0 0 8px; font-size: 24px; font-weight: 900; color: var(--orange-deep); }
+  .closing p { margin: 0; color: var(--text-2); font-size: 15px; font-weight: 500; }
+
+  /* === Rise anim === */
+  .rise { opacity: 0; transform: translateY(12px); animation: rise .6s ease forwards; }
+  .rise-2 { animation-delay: .08s; }
+  .rise-3 { animation-delay: .16s; }
+  .rise-4 { animation-delay: .24s; }
+  .rise-5 { animation-delay: .32s; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 640px) {
+    .t-hero { font-size: 32px; }
+    .container { padding: 16px 14px 64px; }
+    .step-card { grid-template-columns: 1fr; }
+    .role-table th, .role-table td, .qa-table th, .qa-table td { padding: 12px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-top">
+  <span class="brand">Light Survey</span>
+  <span class="sep">/</span>
+  <span class="crumbs">利用ガイド</span>
+  <span class="spacer"></span>
+  <span class="meta">v1.0 · 2026/05</span>
+</nav>
+
+<div class="container">
+
+  <header class="page rise">
+    <h1 class="t-hero">Light Survey へ <span class="accent">ようこそ</span></h1>
+    <p class="lede">
+      心地よく働くための月次コンディションサーベイ。
+      毎月10分で、自分のコンディションと（メンバーは）リーダー評価を回答するだけ。
+      早期に気づき、早期にフォローできる組織を一緒につくります。
+    </p>
+    <div class="meta-row">
+      <span class="pill pill-orange">月次サイクル</span>
+      <span class="pill pill-yellow">10分以内で完了</span>
+      <span class="pill">全社員対象</span>
+    </div>
+  </header>
+
+  <!-- 1. このサーベイの目的 -->
+  <div class="sec-head">
+    <span class="num">1</span>
+    <h2>このサーベイの目的</h2>
+    <span class="sub">なぜ毎月、回答するのか</span>
+  </div>
+  <div class="purpose-grid">
+    <article class="purpose-card rise">
+      <div class="icon">📊</div>
+      <h3>コンディションを継続的に把握する</h3>
+      <p>一人ひとりが心地よく働けているか。月に一度「最近どう？」を構造化して聞く仕組みです。</p>
+    </article>
+    <article class="purpose-card rise rise-2">
+      <div class="icon">🎯</div>
+      <h3>マネジメントを見える化する</h3>
+      <p>メンバーからの評価と役員の期待を組み合わせて、リーダーのマネジメントが機能しているか測定します。</p>
+    </article>
+    <article class="purpose-card rise rise-3">
+      <div class="icon">🤝</div>
+      <h3>早期に気づき、早期にフォロー</h3>
+      <p>コンディションが低下した時に、1on1等で素早く対応できるようにします。</p>
+    </article>
+  </div>
+
+  <!-- 2. 3つのロール -->
+  <div class="sec-head">
+    <span class="num">2</span>
+    <h2>3つのロール</h2>
+    <span class="sub">自分のロールは管理者から事前に案内されます</span>
+  </div>
+  <div class="role-table-wrap rise">
+    <table class="role-table">
+      <thead>
+        <tr>
+          <th>ロール</th>
+          <th>対象者</th>
+          <th>サーベイで答えること</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>メンバー</td>
+          <td>現場メンバー</td>
+          <td>リーダー評価 ＋ 自身のコンディション</td>
+        </tr>
+        <tr>
+          <td>リーダー</td>
+          <td>チームを持つ管理職</td>
+          <td>自己評価 ＋ チーム観察 ＋ 自身のコンディション</td>
+        </tr>
+        <tr>
+          <td>役員</td>
+          <td>経営層 / 執行役員</td>
+          <td>各リーダーへの期待比重（4軸の配分）</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. 利用ステップ -->
+  <div class="sec-head">
+    <span class="num">3</span>
+    <h2>利用ステップ</h2>
+    <span class="sub">ログインから回答完了まで</span>
+  </div>
+  <div class="step-stack">
+
+    <article class="step-card rise">
+      <div class="step-num"><span>STEP</span><strong>1</strong></div>
+      <div class="step-body">
+        <h3>本番 URL を開く</h3>
+        <p>ブラウザで以下の URL にアクセスしてください。</p>
+        <span class="url-code">https://light-survey.light-5d5.workers.dev/</span>
+        <p class="note">ブックマーク登録しておくと次回からアクセスがスムーズです</p>
+      </div>
+    </article>
+
+    <article class="step-card rise rise-2">
+      <div class="step-num"><span>STEP</span><strong>2</strong></div>
+      <div class="step-body">
+        <h3>Google アカウントでサインイン</h3>
+        <p>「Google でログイン」ボタンを押すと Google のアカウント選択画面に進みます。<strong>@light-inc.com</strong> の会社アカウントを選択してログインしてください。</p>
+        <p class="note">個人 Gmail ではログインできません。必ず会社の Google アカウントを使用してください</p>
+      </div>
+    </article>
+
+    <article class="step-card rise rise-3">
+      <div class="step-num"><span>STEP</span><strong>3</strong></div>
+      <div class="step-body">
+        <h3>ホーム画面に到達</h3>
+        <p>ログインに成功すると、自分のロールに応じたホーム画面が表示されます。左上に自分の名前と所属チームが見えればOKです。</p>
+        <p class="note">ロール表示が違う場合は管理者（Slack: #light-survey）までご連絡ください</p>
+      </div>
+    </article>
+
+    <article class="step-card rise rise-4">
+      <div class="step-num"><span>STEP</span><strong>4</strong></div>
+      <div class="step-body">
+        <h3>サーベイページを開く</h3>
+        <p>左メニューの「サーベイ」をクリック。当月のサーベイカードが表示されます。</p>
+        <p class="note">サーベイカードに「未回答」が表示されている期間内のものを選んでください</p>
+      </div>
+    </article>
+
+    <article class="step-card rise rise-5">
+      <div class="step-num"><span>STEP</span><strong>5</strong></div>
+      <div class="step-body">
+        <h3>設問に答える（選択肢を押すだけ）</h3>
+        <p>チャット形式で設問が表示されます。しっくりくる選択肢を1つ押してください。次の設問に自動で進みます。</p>
+        <p class="note">各設問は4段階（とても感じている / 概ね / 少し / 感じていない 等）</p>
+      </div>
+    </article>
+
+    <article class="step-card rise rise-5">
+      <div class="step-num"><span>STEP</span><strong>6</strong></div>
+      <div class="step-body">
+        <h3>自由記述（任意）</h3>
+        <p>最後にリーダーへ伝えたいことがあれば入力欄に記入してください。特にない場合は「特になし」ボタンを押せばOKです。</p>
+        <p class="note">自由記述はリーダー本人と一部の権限者のみが閲覧します</p>
+      </div>
+    </article>
+
+    <article class="step-card rise rise-5">
+      <div class="step-num"><span>STEP</span><strong>7</strong></div>
+      <div class="step-body">
+        <h3>送信して完了</h3>
+        <p>全設問に回答し終えると完了画面に移ります。「回答を送信して終了」ボタンを押すと、回答が保存されます。</p>
+        <p class="note">送信後も期間内なら何度でも修正可能です</p>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- 4. 何を答えるか -->
+  <div class="sec-head">
+    <span class="num">4</span>
+    <h2>何を答えるのか</h2>
+    <span class="sub">ロールごとに設問の内容が変わります</span>
+  </div>
+  <div class="qa-table-wrap rise">
+    <table class="qa-table">
+      <thead>
+        <tr>
+          <th>ロール</th>
+          <th>答える内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>メンバー</td>
+          <td>
+            <ol>
+              <li>自分のリーダーへの評価（目標達成への推進 / 強みの活用 / メンバーの育成 / 他チーム・経営層との連携）</li>
+              <li>自身のコンディション（帰属意識 / やりがい / 風土 / 成果実感）</li>
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>リーダー</td>
+          <td>
+            <ol>
+              <li>自分のマネジメント自己評価</li>
+              <li>チーム全体の観察</li>
+              <li>自身のコンディション（帰属意識 / やりがい / 風土 / 成果実感）</li>
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>役員</td>
+          <td>
+            各リーダーへの期待を4つの観点（目標達成への推進 / 強みの活用 / メンバーの育成 / 他チーム連携）で合計100%で配分
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5. 困ったら -->
+  <div class="sec-head">
+    <span class="num">5</span>
+    <h2>困った時は</h2>
+    <span class="sub">気軽にお声がけください</span>
+  </div>
+  <div class="help-grid">
+    <article class="help-card rise">
+      <h3>🔐 ログインできない / ロールが違う</h3>
+      <p>管理担当（HR）に Slack（個別チャンネル等）でご連絡ください。</p>
+    </article>
+    <article class="help-card rise rise-2">
+      <h3>❓ 設問の意味が分かりづらい</h3>
+      <p>「迷いがある」「物足りない」など、しっくりくる選択肢を選んでOKです。深く考えすぎず、率直に。</p>
+    </article>
+  </div>
+
+  <div class="closing rise">
+    <h2>率直な回答が、組織をよくします</h2>
+    <p>ご協力ありがとうございます</p>
+  </div>
+
+</div>
+
+</body>
+</html>
