@@ -209,6 +209,30 @@
     display: flex; align-items: flex-start; justify-content: center;
   }
   .screen-card .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .screen-card .shot.placeholder {
+    background: linear-gradient(135deg, var(--orange-pale) 0%, var(--yellow-pale) 100%);
+    align-items: center; justify-content: center;
+    padding: 20px 22px;
+  }
+  .ph-stack { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+  .ph-row {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 150, 0, 0.25);
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: 12.5px; font-weight: 600; color: var(--orange-deep);
+    line-height: 1.45;
+  }
+  .ph-dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--orange); flex-shrink: 0;
+  }
+  .ph-label { flex: 1; }
+  .ph-note {
+    margin: 6px 0 0; font-size: 11px; color: var(--text-3);
+    text-align: center; font-weight: 500; line-height: 1.55;
+  }
   .screen-card .body { padding: 16px 20px 20px; }
   .screen-card h4 { margin: 0 0 6px; font-size: 14.5px; font-weight: 800; }
   .screen-card p { margin: 0; color: var(--text-2); font-size: 12.5px; line-height: 1.65; }
@@ -534,7 +558,7 @@
     <div class="role-block-head">
       <span class="role-tag leader">リーダー</span>
       <h3>ホーム / サーベイ / レポート / マイページ</h3>
-      <p>レポートは「自チーム」のみ閲覧可能 (他チームは見えない)</p>
+      <p>レポートは「自分の振り返り」のみ。メンバーからの評価は集計画面に出ません</p>
     </div>
     <div class="screen-grid">
       <article class="screen-card">
@@ -554,10 +578,23 @@
         </div>
       </article>
       <article class="screen-card">
-        <div class="shot"><img src="leader-reports.png" alt="リーダーの自チームレポート" loading="lazy"></div>
+        <div class="shot placeholder">
+          <div class="ph-stack">
+            <div class="ph-row">
+              <span class="ph-dot"></span><span class="ph-label">自分のコンディション (帰属意識 / やりがい / 風土 / 成果実感)</span>
+            </div>
+            <div class="ph-row">
+              <span class="ph-dot"></span><span class="ph-label">自分のマネジメント自己評価 (4 軸)</span>
+            </div>
+            <div class="ph-row">
+              <span class="ph-dot"></span><span class="ph-label">役員の期待比重 vs 自分の重み配分のギャップ</span>
+            </div>
+            <p class="ph-note">※ メンバーからの評価は表示しない<br>（小チームでの個人特定を避けるため）</p>
+          </div>
+        </div>
         <div class="body">
-          <h4>自チームレポート</h4>
-          <p>メンバーからの 4 軸評価・期待比重・加重総合スコア・自己 vs メンバー評価のギャップ・エンゲージメント 4 軸・スコアトレンド・AI 考察ハイライト。</p>
+          <h4>自分のレポート</h4>
+          <p>「自分のコンディション」「自分のマネジメント自己評価」「役員から受け取った期待比重と自分の配分のギャップ」の 3 ブロック。<strong>メンバーからの評価データは表示しない仕様</strong>です。</p>
           <span class="path">/reports</span>
         </div>
       </article>
@@ -567,57 +604,6 @@
           <h4>マイページ</h4>
           <p>「自チームのレポート閲覧」が「現在できること」に追加で表示される。</p>
           <span class="path">/me</span>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- 役員 -->
-  <section class="role-block rise rise-3">
-    <div class="role-block-head">
-      <span class="role-tag executive">役員</span>
-      <h3>ホーム / サーベイ / レポート / ダッシュボード / 管理</h3>
-      <p>全社の全データが閲覧でき、ユーザー招待・期間運用も担当</p>
-    </div>
-    <div class="screen-grid">
-      <article class="screen-card">
-        <div class="shot"><img src="executive-home.png" alt="役員のホーム" loading="lazy"></div>
-        <div class="body">
-          <h4>ホーム</h4>
-          <p>配下リーダーの状況、全社サーベイの進捗、各リーダーへの期待配分入力導線、ユーザー管理 / ダッシュボード / レポートへのショートカット。</p>
-          <span class="path">/</span>
-        </div>
-      </article>
-      <article class="screen-card">
-        <div class="shot"><img src="executive-reports.png" alt="役員の全社レポート" loading="lazy"></div>
-        <div class="body">
-          <h4>全社レポート</h4>
-          <p>全社平均 + リーダー別詳細を一覧。マネジメント 4 軸の比較・スコアトレンド・各リーダーの AI 考察ハイライトまで。</p>
-          <span class="path">/reports</span>
-        </div>
-      </article>
-      <article class="screen-card">
-        <div class="shot"><img src="executive-dashboard.png" alt="役員のダッシュボード" loading="lazy"></div>
-        <div class="body">
-          <h4>ダッシュボード</h4>
-          <p>マネジメント総合 / エンゲージメント総合 / 回答率 / 最大ギャップ + リーダー別スコア・月次スコアマトリックス・メンバーコンディションシート・コンディション月次トレンド。</p>
-          <span class="path">/dashboard</span>
-        </div>
-      </article>
-      <article class="screen-card">
-        <div class="shot"><img src="executive-admin-users.png" alt="役員のユーザー管理" loading="lazy"></div>
-        <div class="body">
-          <h4>ユーザー管理</h4>
-          <p>全社員のロール・チーム・状態を一覧で編集。招待ダイアログから新規メンバー追加 (Resend で招待メール自動送信)。</p>
-          <span class="path">/admin/users</span>
-        </div>
-      </article>
-      <article class="screen-card">
-        <div class="shot"><img src="executive-admin-periods.png" alt="役員の期間管理" loading="lazy"></div>
-        <div class="body">
-          <h4>期間管理</h4>
-          <p>「コンディション」「チーム状況」の 2 種類のサーベイ期間を独立して開閉。月次の運用画面。</p>
-          <span class="path">/admin/periods</span>
         </div>
       </article>
     </div>
