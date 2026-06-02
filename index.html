@@ -89,6 +89,9 @@
   }
   .pill-orange { background: var(--orange-pale); color: var(--orange-deep); }
   .pill-yellow { background: var(--yellow-pale); color: #8a6a00; border: 1px solid rgba(245, 215, 110, 0.5); }
+  .pill-teal { background: rgba(74, 184, 170, 0.12); color: #2f8579; }
+  .pill-blue { background: rgba(91, 164, 217, 0.12); color: #3e7aa6; }
+  .pill-purple { background: rgba(184, 122, 174, 0.14); color: #8a4d7e; }
 
   .sec-head { margin: 56px 4px 18px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
   .sec-head .num {
@@ -171,6 +174,51 @@
   .qa-table ol { margin: 0; padding-left: 18px; }
   .qa-table ol li { margin-bottom: 4px; }
 
+  /* === Role gallery === */
+  .role-block { margin-bottom: 40px; }
+  .role-block:last-child { margin-bottom: 0; }
+  .role-block-head {
+    display: flex; align-items: center; gap: 12px;
+    margin: 0 4px 14px; padding: 14px 20px;
+    background: linear-gradient(90deg, var(--orange-pale) 0%, rgba(255, 248, 214, 0.6) 100%);
+    border-radius: var(--r-md); border: 1px solid rgba(255, 150, 0, 0.18);
+  }
+  .role-block-head .role-tag {
+    font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 999px;
+    background: var(--orange); color: #fff; letter-spacing: 0.05em;
+  }
+  .role-block-head .role-tag.leader { background: var(--teal); }
+  .role-block-head .role-tag.executive { background: var(--purple); }
+  .role-block-head h3 {
+    margin: 0; font-size: 17px; font-weight: 800; color: var(--text);
+  }
+  .role-block-head p {
+    margin: 0; margin-left: auto; color: var(--text-3); font-size: 12.5px; font-weight: 500;
+  }
+  .screen-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px;
+  }
+  .screen-card {
+    background: #fff; border: var(--border); border-radius: var(--r-lg);
+    box-shadow: var(--card-shadow); overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .screen-card .shot {
+    width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: #fafafa;
+    border-bottom: 1px solid rgba(60, 40, 10, 0.06);
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .screen-card .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+  .screen-card .body { padding: 16px 20px 20px; }
+  .screen-card h4 { margin: 0 0 6px; font-size: 14.5px; font-weight: 800; }
+  .screen-card p { margin: 0; color: var(--text-2); font-size: 12.5px; line-height: 1.65; }
+  .screen-card .path {
+    display: inline-block; margin-top: 8px;
+    font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px;
+    color: var(--orange-deep); background: var(--orange-pale);
+    padding: 2px 8px; border-radius: 6px; font-weight: 600;
+  }
+
   /* === Help section === */
   .help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
   .help-card {
@@ -204,6 +252,8 @@
     .step-num { width: 44px; height: 44px; }
     .step-num strong { font-size: 19px; }
     .role-table th, .role-table td, .qa-table th, .qa-table td { padding: 12px 14px; font-size: 13px; }
+    .role-block-head { flex-wrap: wrap; }
+    .role-block-head p { margin-left: 0; width: 100%; }
   }
 </style>
 </head>
@@ -214,7 +264,7 @@
   <span class="sep">/</span>
   <span class="crumbs">利用ガイド</span>
   <span class="spacer"></span>
-  <span class="meta">v1.0 · 2026/05</span>
+  <span class="meta">v1.1 · 2026/06</span>
 </nav>
 
 <div class="container">
@@ -222,14 +272,15 @@
   <header class="page rise">
     <h1 class="t-hero">Light Survey へ <span class="accent">ようこそ</span></h1>
     <p class="lede">
-      心地よく働くための月次コンディションサーベイ。
-      毎月10分で、自分のコンディションと（メンバーは）リーダー評価を回答するだけ。
+      心地よく働くための月次サーベイ。
+      自分のコンディションと（メンバーは）リーダーへの評価を、毎月10分以内で。
       早期に気づき、早期にフォローできる組織を一緒につくります。
     </p>
     <div class="meta-row">
       <span class="pill pill-orange">月次サイクル</span>
       <span class="pill pill-yellow">10分以内で完了</span>
       <span class="pill">全社員対象</span>
+      <span class="pill">招待制（@light-inc.com）</span>
     </div>
   </header>
 
@@ -286,7 +337,7 @@
         <tr>
           <td>役員</td>
           <td>経営層 / 執行役員</td>
-          <td>各リーダーへの期待比重（4軸の配分）</td>
+          <td>各リーダーへの期待比重（4軸の配分）＋ 全社レポート閲覧</td>
         </tr>
       </tbody>
     </table>
@@ -330,8 +381,8 @@
         <div class="step-num"><span>STEP</span><strong>3</strong></div>
         <div class="step-body">
           <h3>ホーム画面に到達</h3>
-          <p>ログインに成功すると、自分のロールに応じたホーム画面が表示されます。左下に自分の名前と所属ロールが見えればOKです。</p>
-          <p class="note">ロール表示が違う場合は管理者（Slack: #light-survey）までご連絡ください</p>
+          <p>ログインに成功すると、自分のロールに応じたホーム画面が表示されます。左下に自分の名前とロールバッジが見えればOKです。</p>
+          <p class="note">ロール表示が違う場合は管理者（Slack）までご連絡ください</p>
         </div>
       </div>
       <div class="step-capture"><img src="step3-home.png" alt="ホーム画面" loading="lazy"></div>
@@ -343,8 +394,8 @@
         <div class="step-num"><span>STEP</span><strong>4</strong></div>
         <div class="step-body">
           <h3>サーベイページを開く</h3>
-          <p>左メニューの「サーベイ」をクリック。当月のサーベイカードが表示されます。</p>
-          <p class="note">「回答中」または「未回答」が表示されている期間内のものを選んでください</p>
+          <p>左メニューの「サーベイ」をクリック。当月のサーベイカードが表示されます。「コンディション」と「チーム状況」の 2 種類があり、それぞれ独立して回答できます。</p>
+          <p class="note">「未回答」または「回答中」が付いているカードを順に開いてください</p>
         </div>
       </div>
       <div class="step-capture"><img src="step4-survey-list.png" alt="サーベイ一覧画面" loading="lazy"></div>
@@ -357,7 +408,7 @@
         <div class="step-body">
           <h3>設問に答える（選択肢を押すだけ）</h3>
           <p>チャット形式で設問が表示されます。しっくりくる選択肢を1つ押してください。次の設問に自動で進みます。</p>
-          <p class="note">各設問は4段階（とても感じている / 概ね / 少し / 感じていない 等）。上記に当てはまらない場合は下部に自由入力もできます</p>
+          <p class="note">各設問は 4 段階。コンディションは「充実 / 良好 / 要注意 / 要ケア」、マネジメントは「卓越 / 期待通り / 注意 / 要改善」のニュアンスです</p>
         </div>
       </div>
       <div class="step-capture"><img src="step5-question.png" alt="設問画面" loading="lazy"></div>
@@ -420,25 +471,161 @@
           <td>リーダー</td>
           <td>
             <ol>
-              <li>自分のマネジメント自己評価</li>
+              <li>自分のマネジメント自己評価 ＋ 重み配分</li>
               <li>チーム全体の観察</li>
-              <li>自身のコンディション（帰属意識 / やりがい / 風土 / 成果実感）</li>
+              <li>自身のコンディション（メンバーと同じ 4 軸）</li>
             </ol>
           </td>
         </tr>
         <tr>
           <td>役員</td>
           <td>
-            各リーダーへの期待を4つの観点（目標達成への推進 / 強みの活用 / メンバーの育成 / 他チーム連携）で合計100%で配分
+            各リーダーへの期待を 4 軸（目標達成への推進 / 強みの活用 / メンバーの育成 / 他チーム連携）で合計 100% 配分。直近 1 ヶ月分のみ未回答対象。
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 5. 困ったら -->
+  <!-- 5. ロール別に見える画面 -->
   <div class="sec-head">
     <span class="num">5</span>
+    <h2>ロール別に見える画面</h2>
+    <span class="sub">ログイン後にアクセスできるページの全体像</span>
+  </div>
+
+  <!-- メンバー -->
+  <section class="role-block rise">
+    <div class="role-block-head">
+      <span class="role-tag">メンバー</span>
+      <h3>ホーム / サーベイ / マイページ</h3>
+      <p>レポートやダッシュボードへはアクセスできません</p>
+    </div>
+    <div class="screen-grid">
+      <article class="screen-card">
+        <div class="shot"><img src="member-home.png" alt="メンバーのホーム" loading="lazy"></div>
+        <div class="body">
+          <h4>ホーム</h4>
+          <p>今月のコンディションサーベイとチーム状況サーベイのカード。両方とも独立して回答できる。</p>
+          <span class="path">/</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="member-survey-list.png" alt="メンバーのサーベイ一覧" loading="lazy"></div>
+        <div class="body">
+          <h4>サーベイ一覧</h4>
+          <p>コンディション (4 軸 self) と チーム状況ヒアリング が並ぶ。回答済みでも期間内なら再回答可能。</p>
+          <span class="path">/survey</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="member-me.png" alt="メンバーのマイページ" loading="lazy"></div>
+        <div class="body">
+          <h4>マイページ</h4>
+          <p>自分の現在のロール・チーム・できることが表示される。権限変更の依頼導線つき。</p>
+          <span class="path">/me</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- リーダー -->
+  <section class="role-block rise rise-2">
+    <div class="role-block-head">
+      <span class="role-tag leader">リーダー</span>
+      <h3>ホーム / サーベイ / レポート / マイページ</h3>
+      <p>レポートは「自チーム」のみ閲覧可能 (他チームは見えない)</p>
+    </div>
+    <div class="screen-grid">
+      <article class="screen-card">
+        <div class="shot"><img src="leader-home.png" alt="リーダーのホーム" loading="lazy"></div>
+        <div class="body">
+          <h4>ホーム</h4>
+          <p>マネジメント自己評価 + チーム観察 + 自身のコンディションが 1 つのフローに統合。自チームレポートへのショートカットも。</p>
+          <span class="path">/</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="leader-survey-list.png" alt="リーダーのサーベイ一覧" loading="lazy"></div>
+        <div class="body">
+          <h4>サーベイ一覧</h4>
+          <p>「マネジメント自己評価」カード 1 枚で、4 軸の重み配分・自己評価・チーム観察・自身のコンディションまで連続回答。</p>
+          <span class="path">/survey</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="leader-reports.png" alt="リーダーの自チームレポート" loading="lazy"></div>
+        <div class="body">
+          <h4>自チームレポート</h4>
+          <p>メンバーからの 4 軸評価・期待比重・加重総合スコア・自己 vs メンバー評価のギャップ・エンゲージメント 4 軸・スコアトレンド・AI 考察ハイライト。</p>
+          <span class="path">/reports</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="leader-me.png" alt="リーダーのマイページ" loading="lazy"></div>
+        <div class="body">
+          <h4>マイページ</h4>
+          <p>「自チームのレポート閲覧」が「現在できること」に追加で表示される。</p>
+          <span class="path">/me</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 役員 -->
+  <section class="role-block rise rise-3">
+    <div class="role-block-head">
+      <span class="role-tag executive">役員</span>
+      <h3>ホーム / サーベイ / レポート / ダッシュボード / 管理</h3>
+      <p>全社の全データが閲覧でき、ユーザー招待・期間運用も担当</p>
+    </div>
+    <div class="screen-grid">
+      <article class="screen-card">
+        <div class="shot"><img src="executive-home.png" alt="役員のホーム" loading="lazy"></div>
+        <div class="body">
+          <h4>ホーム</h4>
+          <p>配下リーダーの状況、全社サーベイの進捗、各リーダーへの期待配分入力導線、ユーザー管理 / ダッシュボード / レポートへのショートカット。</p>
+          <span class="path">/</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="executive-reports.png" alt="役員の全社レポート" loading="lazy"></div>
+        <div class="body">
+          <h4>全社レポート</h4>
+          <p>全社平均 + リーダー別詳細を一覧。マネジメント 4 軸の比較・スコアトレンド・各リーダーの AI 考察ハイライトまで。</p>
+          <span class="path">/reports</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="executive-dashboard.png" alt="役員のダッシュボード" loading="lazy"></div>
+        <div class="body">
+          <h4>ダッシュボード</h4>
+          <p>マネジメント総合 / エンゲージメント総合 / 回答率 / 最大ギャップ + リーダー別スコア・月次スコアマトリックス・メンバーコンディションシート・コンディション月次トレンド。</p>
+          <span class="path">/dashboard</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="executive-admin-users.png" alt="役員のユーザー管理" loading="lazy"></div>
+        <div class="body">
+          <h4>ユーザー管理</h4>
+          <p>全社員のロール・チーム・状態を一覧で編集。招待ダイアログから新規メンバー追加 (Resend で招待メール自動送信)。</p>
+          <span class="path">/admin/users</span>
+        </div>
+      </article>
+      <article class="screen-card">
+        <div class="shot"><img src="executive-admin-periods.png" alt="役員の期間管理" loading="lazy"></div>
+        <div class="body">
+          <h4>期間管理</h4>
+          <p>「コンディション」「チーム状況」の 2 種類のサーベイ期間を独立して開閉。月次の運用画面。</p>
+          <span class="path">/admin/periods</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 6. 困ったら -->
+  <div class="sec-head">
+    <span class="num">6</span>
     <h2>困った時は</h2>
     <span class="sub">気軽にお声がけください</span>
   </div>
@@ -450,6 +637,14 @@
     <article class="help-card rise rise-2">
       <h3>❓ 設問の意味が分かりづらい</h3>
       <p>「迷いがある」「物足りない」など、しっくりくる選択肢を選んでOKです。深く考えすぎず、率直に。</p>
+    </article>
+    <article class="help-card rise rise-3">
+      <h3>📨 招待メールが届かない</h3>
+      <p>メールボックスの迷惑メール / プロモーションタブを確認してください。それでも見つからない場合は HR にご連絡ください。</p>
+    </article>
+    <article class="help-card rise rise-4">
+      <h3>📱 スマホでも使える</h3>
+      <p>iPhone / Android のブラウザに最適化されています。サイドメニューは左上のハンバーガーボタンから。</p>
     </article>
   </div>
 
