@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Light Survey — 萩原 × 楢木 役割分担</title>
+    <style>
+      :root {
+        --bg: #fafaf7;
+        --fg: #1f1d1a;
+        --muted: #6b665d;
+        --line: #e5e1d8;
+        --card: #ffffff;
+        --orange: #ff9600;
+        --orange-soft: #fff3df;
+        --blue: #2563eb;
+        --blue-soft: #e8efff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+          "Yu Gothic UI", system-ui, sans-serif;
+        line-height: 1.7;
+      }
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+      }
+      header.hero {
+        padding: 32px 0 24px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 40px;
+      }
+      header.hero h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+        letter-spacing: 0.01em;
+      }
+      header.hero .lead {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      h2 {
+        margin: 56px 0 16px;
+        font-size: 20px;
+        border-left: 4px solid var(--orange);
+        padding-left: 12px;
+      }
+      h3 {
+        margin: 32px 0 12px;
+        font-size: 16px;
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 24px 0 8px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px;
+      }
+      .card.hagiwara {
+        border-left: 4px solid var(--orange);
+      }
+      .card.naraki {
+        border-left: 4px solid var(--blue);
+      }
+      .card h3 {
+        margin-top: 0;
+      }
+      .count {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1;
+        margin: 4px 0 8px;
+      }
+      .count .unit {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        margin-left: 6px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 6px;
+      }
+      .pill.hagiwara {
+        background: var(--orange-soft);
+        color: #a35d00;
+      }
+      .pill.naraki {
+        background: var(--blue-soft);
+        color: #1d3fa8;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 8px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 12px 14px;
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        vertical-align: top;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      th {
+        background: #f5f2eb;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      td.who {
+        width: 80px;
+        white-space: nowrap;
+      }
+      td.area {
+        width: 200px;
+        font-weight: 600;
+      }
+      ul.work {
+        margin: 6px 0 0;
+        padding-left: 18px;
+      }
+      ul.work li {
+        font-size: 14px;
+        margin: 4px 0;
+      }
+      .pr {
+        color: var(--muted);
+        font-size: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      .timeline {
+        margin: 12px 0;
+        padding: 0;
+        list-style: none;
+      }
+      .timeline li {
+        padding: 10px 0 10px 18px;
+        border-left: 2px solid var(--line);
+        position: relative;
+        margin-left: 8px;
+      }
+      .timeline li::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 16px;
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: var(--orange);
+      }
+      .timeline li.naraki::before {
+        background: var(--blue);
+      }
+      .timeline .date {
+        font-size: 12px;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      .timeline .title {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 2px;
+      }
+      .note {
+        background: #fffaf0;
+        border: 1px solid #f3d68a;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin: 16px 0;
+        font-size: 14px;
+        color: #6b4a00;
+      }
+      footer {
+        margin-top: 64px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+      @media (max-width: 640px) {
+        .summary {
+          grid-template-columns: 1fr;
+        }
+        td.area {
+          width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Light Survey — 萩原さん × 楢木さんの役割分担</h1>
+        <p class="lead">
+          2026-04-27 から 2026-06-01 までの全コミットを git log から集計し、
+          どちらが何を作ったかをまとめたものです。
+        </p>
+      </header>
+
+      <section>
+        <h2>サマリー</h2>
+        <div class="summary">
+          <div class="card hagiwara">
+            <h3>萩原さん <span class="pill hagiwara">プロダクト責任者 / 機能設計</span></h3>
+            <div class="count">16<span class="unit">commits</span></div>
+            <p>
+              レポート・ダッシュボードの計算ロジック、AI 統合の基盤、リーダー統合とコンディション設問、
+              招待メール (Resend)、UI の細部調整、デモデータ運用スクリプトなど、
+              <strong>「ユーザーに何が見えるか」</strong>を決める領域を担当。
+            </p>
+          </div>
+          <div class="card naraki">
+            <h3>楢木さん <span class="pill naraki">基盤エンジニア / プラットフォーム</span></h3>
+            <div class="count">209<span class="unit">commits</span></div>
+            <p>
+              Supabase / Cloudflare Workers / CI/CD のインフラ、DB スキーマ + RLS、認証 (Google OAuth)、
+              モック実装、データアクセス層、E2E テスト、性能最適化、Slack 連携、リファクタなど、
+              <strong>「動く土台と安全装置」</strong>を担当。
+            </p>
+          </div>
+        </div>
+
+      </section>
+
+      <section>
+        <h2>用語解説 (非エンジニア向け)</h2>
+        <p style="color: var(--muted); font-size: 14px; margin-top: 0">
+          以降の説明に出てくる技術用語を、家・お店に例えて先にまとめます。
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>用語</th>
+              <th>ひとことで言うと</th>
+              <th>Light Survey での役割</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="area">Supabase</td>
+              <td>
+                <strong>データの保管庫 + 受付係</strong>。<br />
+                データベース (回答や所属の保存場所) と、ログイン処理、
+                アクセス制御をまとめて提供するクラウドサービス。
+              </td>
+              <td>
+                サーベイの回答・ユーザー・チーム・期間など
+                <em>すべての情報</em>を保管していて、
+                「この人はリーダーだから自チームだけ見せる」といった
+                ルールも Supabase の中で守られています。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">Cloudflare<br />(Workers)</td>
+              <td>
+                <strong>アプリを世界中に届ける配達網</strong>。<br />
+                Web サイトやアプリを実際にユーザーのブラウザに配信する
+                グローバルなインフラ。
+              </td>
+              <td>
+                Light Survey の URL を開いた時に、
+                画面を組み立ててブラウザに返してくれているのが
+                Cloudflare Workers です。
+                サーバーを自前で用意せずに済むのが利点。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">認証<br />(Google OAuth)</td>
+              <td>
+                <strong>ログインの仕組み</strong>。<br />
+                「アクセスしてきた人が本当に Light の社員か」を
+                Google アカウント経由で確かめる方式。
+              </td>
+              <td>
+                Light の Google Workspace アカウントでログインし、
+                その人がメンバー / リーダー / 役員 のどれなのかを判定して、
+                見える画面・データを切り替える基盤。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">RLS<br />(Row Level Security)</td>
+              <td>
+                <strong>データベースが自分で守る鍵</strong>。<br />
+                直訳すると「行レベルのセキュリティ」。
+                データの 1 行 1 行に「誰が見ていいか」のルールを
+                データベース自身が持っている仕組み。
+              </td>
+              <td>
+                例えばメンバーが他人の回答を見ようとしても、
+                アプリのコードが間違っていたとしても、
+                <strong>データベース側で自動的に拒否</strong>される。
+                小さなチームで個人の回答が漏れないための
+                最後の砦になっています。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">E2E テスト<br />(End-to-End)</td>
+              <td>
+                <strong>ロボットによる動作確認</strong>。<br />
+                ブラウザを実際に自動で動かして、
+                「ログイン → 回答 → 送信 → レポート確認」を
+                通しでテストする仕組み。
+              </td>
+              <td>
+                人間がいちいち全画面を触らなくても、
+                プログラムが勝手にメンバー / リーダー / 役員 の役で
+                アプリを操作して「壊れていないか」を確認します。
+                機能追加のたびに自動で走る。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">性能 (Performance)</td>
+              <td>
+                <strong>ページの軽さ・速さ</strong>。<br />
+                表示までの待ち時間、サーバー負荷、データ取得の効率など、
+                「待たされない / 落ちない」をつくる作業。
+              </td>
+              <td>
+                例えば「リーダーレポートを開く時に、
+                内部で 6 回データベースに問い合わせていたのを 1 回にまとめる」
+                など、ユーザーが体感する速さに直結する地味だが重要な改善。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">CI / CD</td>
+              <td>
+                <strong>自動チェック + 自動公開のベルトコンベア</strong>。<br />
+                コードを GitHub にアップした瞬間に、
+                テスト → ビルド → 本番反映までを自動で流す仕組み。
+              </td>
+              <td>
+                楢木さんがコードを書いて main ブランチにマージすると、
+                自動で Cloudflare に反映され、本番環境が更新される。
+                「リリース作業」を人手でやらなくて良くなる。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">data-source 層<br />(モック / 本番の切替)</td>
+              <td>
+                <strong>データの取り出し口を 1 つに揃える設計</strong>。<br />
+                画面側からは「データをくれ」と言うだけで、
+                裏が Supabase なのか架空データ (モック) なのかを
+                気にしなくて良くする層。
+              </td>
+              <td>
+                Supabase を使わずローカルだけで全画面が触れる
+                「モックモード」を成り立たせているのがこの設計。
+                開発・デモ・テストが安全にできるようになっています。
+              </td>
+            </tr>
+            <tr>
+              <td class="area">リファクタ<br />(DDD 化)</td>
+              <td>
+                <strong>機能を変えずに中身を整理整頓</strong>。<br />
+                外から見える動きはそのままで、
+                コードの構造を読みやすく・直しやすくする作業。
+              </td>
+              <td>
+                コードが大きくなってきた時に、
+                「この大きなファイルを役割ごとに分ける」「同じことを
+                書いている部分を 1 箇所にまとめる」など、
+                将来の開発スピードを保つための投資。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>領域別の担当マップ</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>担当</th>
+              <th>領域</th>
+              <th>具体的にやったこと</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">プロジェクト初期セットアップ</td>
+              <td>
+                Phase 0-4 のプロジェクト雛形、Next.js + TypeScript、shadcn/ui、Tailwind、
+                Hooks / lint / commitlint、初期 CLAUDE.md。
+                <ul class="work">
+                  <li>Phase 0 セットアップ完了 <span class="pr">8511f0f</span></li>
+                  <li>Phase 1-4 をモックモードで全画面動作 <span class="pr">3bd7f2a</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">DB スキーマ + RLS</td>
+              <td>
+                Supabase migration 0001 〜 0044+ の全 SQL、enable / force RLS の徹底、
+                allowlist テーブル、exec_relationships、leader_reports_batch RPC、リマインド DB 基盤。
+                <ul class="work">
+                  <li>ロール体系再編 (manager→leader / hr 廃止 / teams.is_admin) <span class="pr">f1b9899</span></li>
+                  <li>engagement_select_target_mgr を axis 側と対称化 <span class="pr">#22</span></li>
+                  <li>リマインド機能の DB 基盤 (slack_user_id + reminder_log) <span class="pr">#168</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">認証 (Google OAuth + セッション)</td>
+              <td>
+                Google OAuth フロー、/auth/callback の cookie 交換、profiles RLS の再帰修正、
+                requireRole / requireAdminUser ガード、自己降格ブロック + /me ページ。
+                <ul class="work">
+                  <li>Google ログインを signInWithOAuth に修正 <span class="pr">#11</span></li>
+                  <li>Supabase OAuth cookie exchange 本番対応 <span class="pr">#13</span></li>
+                  <li>権限事故防止 - /me + 自己降格ブロック <span class="pr">#110</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">データアクセス層 (data-source)</td>
+              <td>
+                Repository interface、mock / supabase の二重実装、Zod スキーマでの型保証、
+                DDD 化、ファイル分割。
+                <ul class="work">
+                  <li>DataSource interface で mock / supabase の API shape を強制 <span class="pr">#38</span></li>
+                  <li>RPC レスポンスに Zod スキーマを適用 <span class="pr">#52</span></li>
+                  <li>DDD Step 3 - interface DataSource を 5 Repository に分割 <span class="pr">#145</span></li>
+                  <li>lib/data-source/mock.ts (1084 行) を domain 別 6 ファイルに分割 <span class="pr">#148</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">Cloudflare Workers 移行 + CI/CD</td>
+              <td>
+                OpenNext で Cloudflare Workers に乗せ替え、wrangler 設定、Workers Builds、
+                main マージで自動デプロイ、Supabase + Cloudflare 新アカウント移行。
+                <ul class="work">
+                  <li>Cloudflare Workers 移行 Phase 1-2 (OpenNext + wrangler) <span class="pr">0a844a5</span></li>
+                  <li>main マージ時に Cloudflare Workers へ自動デプロイ <span class="pr">#91</span></li>
+                  <li>Supabase + Cloudflare 新アカウント移行 <span class="pr">#90</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">テスト (E2E + RLS)</td>
+              <td>
+                Playwright E2E + RLS 検証スイート、各ロールで他人のデータが見えないかをテストで保証。
+                <ul class="work">
+                  <li>Playwright E2E + RLS 検証スイート追加 <span class="pr">#53</span></li>
+                  <li>U-6 — Unify 後の E2E 整備 + §20.9 チェックリスト完了 <span class="pr">#124</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">セキュリティ / 性能 / 観測性</td>
+              <td>
+                認可ハードニング、OAuth open-redirect 対策、Next.js High CVE 対応、
+                N+1 解消、React cache 化、PII ハッシュログ、admin action ガード統一。
+                <ul class="work">
+                  <li>認可ハードニング - adminAction wrapper / OAuth open-redirect / import-csv Zod 検証 <span class="pr">#137</span></li>
+                  <li>Next.js 16.2.6 で High CVE 解消、bundle 削減 <span class="pr">#136</span></li>
+                  <li>leader_reports_batch RPC で N×6→1 往復に削減 <span class="pr">#146</span></li>
+                  <li>Supabase auth.getUser() を React cache() で集約 <span class="pr">#152</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">期間管理 / コンディションアンケート</td>
+              <td>
+                survey_periods.kind 撤去 + 期間一本化、コンディション + チーム状況の 2 タブ化、
+                /survey 単一リスト化。
+                <ul class="work">
+                  <li>サーベイ種別 (condition / team_state) を分離する DB 基盤 <span class="pr">#112</span></li>
+                  <li>U-1+U-2 — survey_periods.kind 撤去 + data-source 統合 <span class="pr">#120</span></li>
+                  <li>U-4 — /survey 単一リスト化 + ホーム 2 カード統合 <span class="pr">#122</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">Slack 連携 / リマインド</td>
+              <td>Slack DM リマインド機能、未回答者への自動通知。
+                <ul class="work">
+                  <li>Slack DM リマインド機能 (C3 Phase 3+4) <span class="pr">#169</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill naraki">楢木</span></td>
+              <td class="area">役員ビュー / 後続改善</td>
+              <td>
+                管掌範囲スコープと注力配分、リーダーレポートのプライバシー保護
+                (メンバーの自己評価非表示)、ローカル実 DB + ワンクリックロール切替。
+                <ul class="work">
+                  <li>役員ビューに管掌範囲スコープと注力配分を追加 <span class="pr">#183</span></li>
+                  <li>リーダーレポートからメンバーのマネジメント評価を非表示 <span class="pr">#181</span></li>
+                  <li>ローカル実 DB + ワンクリックのロール切替ログイン <span class="pr">#180</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill hagiwara">萩原</span></td>
+              <td class="area">レポート / ダッシュボードのロジック</td>
+              <td>
+                加重総合スコア、役員→リーダーの期待ウェイト、状態ラベル、フィルタ / ソート、
+                メンバー月次マトリックス、個別ドリルダウン、成果実感軸。
+                <ul class="work">
+                  <li>加重総合スコアと役員→リーダー期待ウェイトを導入 <span class="pr">df857ad</span></li>
+                  <li>期間切替 + チーム集計 + 月次マトリックス + 個人ドリルダウン + 成果実感軸 <span class="pr">#101</span></li>
+                  <li>メンバー月次マトリックス + 個別詳細ページ + 期間ウィンドウシフト <span class="pr">#102</span></li>
+                  <li>加重総合スコアの状態ラベル + ダッシュボードフィルタ / ソート <span class="pr">#100</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill hagiwara">萩原</span></td>
+              <td class="area">AI 統合 (対話 + スコア抽出)</td>
+              <td>
+                Anthropic SDK 基盤、コストログ、対話ログ保存、AI でのスコア抽出。
+                MVP では Anthropic なしの固定スクリプトで動かしていた所を、Phase 1-2A で実 AI に接続。
+                <ul class="work">
+                  <li>Anthropic SDK 基盤 + cost log skeleton (Phase 1) <span class="pr">#92</span></li>
+                  <li>対話ログ保存 + AI スコア抽出 (Phase 2-A) <span class="pr">#93</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill hagiwara">萩原</span></td>
+              <td class="area">設問 / 軸名 / ラベル設計</td>
+              <td>
+                エンゲージメント軸の命名、コンディションラベルの設計、
+                リーダー自身のコンディション設問追加、リーダー統合 (leader_self に再追加)、
+                メンバー向け平易表現と深掘りスクリプト、admin_member ロール拡張。
+                <ul class="work">
+                  <li>エンゲージメント軸名リネーム + コンディションラベル新設 <span class="pr">#103</span></li>
+                  <li>リーダー自身のコンディション設問追加 (ブロックB) <span class="pr">#109</span></li>
+                  <li>リーダーも統合 — leader_self に自身のコンディション設問を再追加 <span class="pr">#118</span></li>
+                  <li>メンバー向け平易表現 + 深掘りスクリプト + admin_member ロール拡張 <span class="pr">ad6dbfa</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill hagiwara">萩原</span></td>
+              <td class="area">招待 / 運用</td>
+              <td>
+                招待メール自動送信 (Resend)、admin 期間管理の server action 化 + 期間削除、
+                デモデータ削除スクリプト、テスト用 allowlist 投入スクリプト。
+                <ul class="work">
+                  <li>招待メール自動送信を Resend で実装 <span class="pr">#119</span></li>
+                  <li>期間 / 関係性管理を server action 経由に + 期間削除追加 <span class="pr">da27236</span></li>
+                  <li>デモデータ削除スクリプト (dry-run + --apply) <span class="pr">#104</span></li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="who"><span class="pill hagiwara">萩原</span></td>
+              <td class="area">UI 細部調整</td>
+              <td>サーベイ / レポート / 管理画面のダークモード文字色コントラスト改善。
+                <ul class="work">
+                  <li>サーベイ画面のダークモード文字色コントラスト改善 <span class="pr">#97</span></li>
+                  <li>レポート / 管理画面のダークモード文字色コントラスト改善 <span class="pr">#99</span></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>時系列でざっくり振り返り</h2>
+        <ul class="timeline">
+          <li class="naraki">
+            <span class="date">2026-04-27</span>
+            <span class="title">楢木: Phase 0 セットアップ + Phase 1-4 をモックモードで全画面動作</span>
+            プロジェクト雛形と、Supabase なしでも全画面が触れるモック基盤を一気に構築。
+          </li>
+          <li class="naraki">
+            <span class="date">2026-04-28</span>
+            <span class="title">楢木: ロール体系再編 + data-source interface + E2E 整備</span>
+            manager→leader / hr 廃止、teams.is_admin、Zod スキーマ厳密化、Playwright E2E + RLS 検証。
+          </li>
+          <li>
+            <span class="date">2026-04-30</span>
+            <span class="title">萩原: 加重総合スコア + 役員→リーダー期待ウェイト + 期間管理</span>
+            レポート機能の「数字をどう出すか」を初めて確立。後の #100 / #101 の土台になる。
+          </li>
+          <li>
+            <span class="date">2026-05-11 〜 12</span>
+            <span class="title">萩原: AI 統合 (Phase 1 / Phase 2-A) + ダークモードコントラスト改善</span>
+            Anthropic SDK で対話ログ + スコア抽出。ダークモードで見づらかった所を一気に修正。
+          </li>
+          <li>
+            <span class="date">2026-05-13 〜 14</span>
+            <span class="title">萩原: ダッシュボード機能を一気に拡張</span>
+            #100 状態ラベル + フィルタ / ソート → #101 期間切替 + チーム集計 + 月次マトリックス →
+            #102 メンバー個別詳細ページ。
+          </li>
+          <li class="naraki">
+            <span class="date">2026-05-20 〜 22</span>
+            <span class="title">楢木: コンディションアンケート + 期間一本化 (Unify)</span>
+            condition / team_state の DB 分離 → 1 期間に統合の Unify リファクタ。
+          </li>
+          <li>
+            <span class="date">2026-05-21</span>
+            <span class="title">萩原: リーダー統合 (#118) + 招待メール Resend (#119)</span>
+            「リーダーも 1 セッションで全部答える」体験への移行と、招待運用の自動化。
+          </li>
+          <li class="naraki">
+            <span class="date">2026-05-25 〜 30</span>
+            <span class="title">楢木: 性能 / セキュリティ / アーキテクチャの集中改善</span>
+            N+1 解消、Next.js CVE 対応、DDD 化、Slack DM リマインド、ローカル実 DB ロール切替。
+          </li>
+          <li class="naraki">
+            <span class="date">2026-06-01</span>
+            <span class="title">楢木: リーダーレポートのプライバシー保護 + 役員ビュー拡張</span>
+            #181 リーダーには自分のコンディション / 自己評価 / 期待ギャップだけ表示、
+            #183 役員には管掌範囲スコープと注力配分を追加。
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>ひとことで言うと</h2>
+        <div class="summary">
+          <div class="card hagiwara">
+            <h3>萩原さん</h3>
+            <p>
+              「Light のサーベイで <strong>何を測り、どう見せるか</strong>」を定義してきた人。
+              スコア計算 / 軸名 / コンディションラベル / AI 対話 / 招待運用 など、
+              プロダクトのユーザー体験を形作る判断と実装を担当。
+            </p>
+          </div>
+          <div class="card naraki">
+            <h3>楢木さん</h3>
+            <p>
+              「萩原さんが書いた機能が <strong>本番で安全に動き続ける土台</strong>」を整備してきた人。
+              Supabase / Cloudflare / 認証 / RLS / E2E / 性能 / リファクタなど、
+              インフラとプラットフォーム全般を担当。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        集計: 全 225 commits (萩原 16 / 楢木 209)、PR 数 121。<br />
+        期間: 2026-04-27 〜 2026-06-01。git log を著者別に分類して機械的に集計した上で、
+        コミットメッセージから領域を再分類しています。
+      </footer>
+    </div>
+  </body>
+</html>
