@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lightサーベイ 集計ロジック & 設問一覧</title>
+    <style>
+      :root {
+        --primary: #ff9600;
+        --bg: #0f0f10;
+        --card: #1a1a1c;
+        --border: #2a2a2d;
+        --text: #ececed;
+        --muted: #8a8a90;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+      }
+      header {
+        padding: 40px 24px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+      header h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 32px 24px 80px;
+      }
+      section {
+        margin-bottom: 48px;
+      }
+      section > h2 {
+        font-size: 20px;
+        margin: 0 0 16px;
+        padding: 8px 0 8px 12px;
+        border-left: 4px solid var(--primary);
+      }
+      section > h3 {
+        font-size: 16px;
+        margin: 24px 0 12px;
+        color: var(--primary);
+      }
+      section > h4 {
+        font-size: 14px;
+        margin: 20px 0 8px;
+        color: var(--text);
+      }
+      p {
+        margin: 0 0 12px;
+      }
+      .lead {
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 640px) {
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 20px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+      th {
+        background: rgba(255, 150, 0, 0.08);
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .formula {
+        display: block;
+        font-family: "SF Mono", Menlo, monospace;
+        font-size: 15px;
+        background: rgba(255, 150, 0, 0.06);
+        border: 1px solid rgba(255, 150, 0, 0.3);
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: var(--primary);
+        margin: 12px 0;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-right: 4px;
+      }
+      .badge-member {
+        background: #3b82f620;
+        color: #60a5fa;
+      }
+      .badge-leader {
+        background: #10b98120;
+        color: #10b981;
+      }
+      .badge-exec {
+        background: #f59e0b20;
+        color: #f59e0b;
+      }
+      .badge-pres {
+        background: #a78bfa20;
+        color: #a78bfa;
+      }
+      .label-row {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .label-row span {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+      }
+      .label-要改善 {
+        background: rgba(239, 68, 68, 0.15);
+        color: var(--danger);
+      }
+      .label-注意 {
+        background: rgba(245, 158, 11, 0.15);
+        color: var(--warning);
+      }
+      .label-期待通り {
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--success);
+      }
+      .label-卓越 {
+        background: rgba(255, 150, 0, 0.15);
+        color: var(--primary);
+      }
+      .question-block {
+        border-left: 3px solid var(--primary);
+        padding: 12px 16px;
+        margin: 12px 0;
+        background: rgba(255, 150, 0, 0.04);
+        border-radius: 6px;
+      }
+      .question-block .q-title {
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .question-block .q-text {
+        font-size: 14px;
+        color: var(--text);
+        white-space: pre-line;
+        margin-bottom: 10px;
+      }
+      .options {
+        display: grid;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .option {
+        display: grid;
+        grid-template-columns: 32px 1fr 60px;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        font-size: 13px;
+      }
+      .option .emoji {
+        font-size: 18px;
+        text-align: center;
+      }
+      .option .score {
+        color: var(--muted);
+        text-align: right;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .tip {
+        border-left: 3px solid var(--warning);
+        padding: 10px 14px;
+        background: rgba(245, 158, 11, 0.06);
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 12px 0;
+      }
+      .tip strong {
+        color: var(--warning);
+      }
+      details {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin: 8px 0;
+        background: rgba(255, 255, 255, 0.02);
+      }
+      details summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text);
+      }
+      details[open] summary {
+        margin-bottom: 12px;
+      }
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 24px 0;
+      }
+      .toc {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 32px;
+      }
+      .toc ol {
+        margin: 0;
+        padding-left: 24px;
+      }
+      .toc a {
+        color: var(--text);
+        text-decoration: none;
+      }
+      .toc a:hover {
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Lightサーベイ 集計ロジック & 設問一覧</h1>
+      <p>役員陣向け説明資料 / 2026-07 版</p>
+    </header>
+
+    <main>
+      <div class="toc">
+        <strong>目次</strong>
+        <ol>
+          <li><a href="#overview">全体像 (誰が何に答えるか)</a></li>
+          <li><a href="#axes">評価の 4 軸</a></li>
+          <li><a href="#score">マネジメントスコアの計算</a></li>
+          <li><a href="#labels">4 段階ラベル</a></li>
+          <li><a href="#member">メンバーの設問</a></li>
+          <li><a href="#leader">リーダーの設問</a></li>
+          <li><a href="#executive">役員の設問</a></li>
+          <li><a href="#president">社長の設問</a></li>
+          <li><a href="#reports">画面と数字の対応</a></li>
+        </ol>
+      </div>
+
+      <!-- ============================================================ -->
+      <section id="overview">
+        <h2>1. 全体像 — 誰が何に答えるか</h2>
+        <p class="lead">4 ロールがそれぞれの立場から回答し、多面的なマネジメント評価を作ります。</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ロール</th>
+              <th>誰に対して?</th>
+              <th>何を答える?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-member">メンバー</span></td>
+              <td>自分の直属リーダー</td>
+              <td>4 軸 × 各 2 問 (計 8 問) + 自分自身のコンディション 4 問</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-leader">リーダー</span></td>
+              <td>自分自身</td>
+              <td>4 軸の自己評価 + チーム観察 3 問 + 自身のコンディション 4 問</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-exec">役員</span></td>
+              <td>配下リーダー 各人</td>
+              <td>そのリーダーに期待する<strong>注力配分 (4 軸合計 100%)</strong></td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-exec">役員</span></td>
+              <td>自分自身</td>
+              <td>役員自己評価 + 自身のコンディション</td>
+            </tr>
+            <tr>
+              <td><span class="badge badge-pres">社長</span></td>
+              <td>各役員</td>
+              <td>その役員に期待する<strong>注力配分 (4 軸合計 100%)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="tip">
+          <strong>ポイント:</strong> 「軸スコア (0-100)」を答えるのはメンバー・リーダーだけ。役員と社長は「どの軸を重視すべきか」の<strong>比重</strong>を配分します。この 2 種類が掛け合わさって「加重総合スコア」ができます。
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="axes">
+        <h2>2. 評価の 4 軸</h2>
+        <p class="lead">マネジメントを 4 つの視点で分解して見ます。</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>軸 (正式名)</th>
+              <th>意味</th>
+              <th>メンバーへの言い換え</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>執行</strong> (execution)</td>
+              <td>目標を達成すること</td>
+              <td>目標達成への推進</td>
+            </tr>
+            <tr>
+              <td><strong>活用</strong> (utilize)</td>
+              <td>メンバーを活かすこと</td>
+              <td>強みの活用・適材適所</td>
+            </tr>
+            <tr>
+              <td><strong>伸張</strong> (grow)</td>
+              <td>チームを育てること</td>
+              <td>メンバーの育成・採用</td>
+            </tr>
+            <tr>
+              <td><strong>連携</strong> (coordinate)</td>
+              <td>会社の中でチームを機能させること</td>
+              <td>他チーム・経営層との連携</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="score">
+        <h2>3. マネジメントスコアの計算</h2>
+
+        <p>各リーダーのスコア (0-100 点) は、以下の式で算出されます。</p>
+
+        <span class="formula">
+          加重総合スコア = Σ (役員期待比重 × メンバー評価軸スコア) / 100
+        </span>
+
+        <h3>具体例</h3>
+        <p>「A さん」というリーダーがいて:</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <h4>役員からの期待比重 (合計 100%)</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td>執行</td>
+                  <td>40%</td>
+                </tr>
+                <tr>
+                  <td>活用</td>
+                  <td>30%</td>
+                </tr>
+                <tr>
+                  <td>伸張</td>
+                  <td>20%</td>
+                </tr>
+                <tr>
+                  <td>連携</td>
+                  <td>10%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h4>メンバーから見た A さんの 4 軸評価</h4>
+            <table>
+              <tbody>
+                <tr>
+                  <td>執行</td>
+                  <td>80 点</td>
+                </tr>
+                <tr>
+                  <td>活用</td>
+                  <td>70 点</td>
+                </tr>
+                <tr>
+                  <td>伸張</td>
+                  <td>60 点</td>
+                </tr>
+                <tr>
+                  <td>連携</td>
+                  <td>50 点</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <span class="formula">
+          (40 × 80 + 30 × 70 + 20 × 60 + 10 × 50) / 100 = <strong>72 点</strong>
+        </span>
+
+        <div class="tip">
+          <strong>= 役員が「執行 40%重視」と言うなら、執行スコアが総合点に大きく効く。</strong><br />
+          つまり同じメンバー評価でも、役員がどこを重視するかによって「A さんの総合点」は変わります。
+        </div>
+
+        <h3>注意点</h3>
+        <ul>
+          <li>役員が期待比重をまだ入力していない場合 → 4 軸均等 (25% × 4) の単純平均にフォールバック</li>
+          <li>リーダー本人の自己評価は<strong>総合点には直接影響しません</strong> (「メンバー評価 vs 自己評価ギャップ」の可視化に使用)</li>
+          <li>集計は「評価メンバーの team_id」でグループ化されるため、兼務役員 (例: 諸岡=ライバー+アナリティクス) は<strong>チームごとに別カード</strong>で表示</li>
+        </ul>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="labels">
+        <h2>4. 4 段階ラベル</h2>
+        <p>スコアはラベルで色分けされます。</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>ラベル (マネジメント)</th>
+              <th>スコア範囲</th>
+              <th>ラベル (コンディション)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="label-要改善">要改善</span></td>
+              <td>0-39</td>
+              <td><span class="label-要改善">課題有</span></td>
+            </tr>
+            <tr>
+              <td><span class="label-注意">注意</span></td>
+              <td>40-59</td>
+              <td><span class="label-注意">注意</span></td>
+            </tr>
+            <tr>
+              <td><span class="label-期待通り">期待通り</span></td>
+              <td>60-79</td>
+              <td><span class="label-期待通り">順調</span></td>
+            </tr>
+            <tr>
+              <td><span class="label-卓越">卓越</span></td>
+              <td>80-100</td>
+              <td><span class="label-卓越">充実</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="member">
+        <h2>5. メンバーの設問</h2>
+        <p class="lead">4 軸それぞれで「主観評価 + 具体観点」の 2 問構成 = 計 8 問。すべて 4 択 (絵文字 + 説明文)。加えて自身のコンディション 4 問。</p>
+
+        <h3>執行 (目標達成への推進)</h3>
+        <div class="question-block">
+          <div class="q-title">Q1. 目標の明確さ・進捗実感</div>
+          <div class="q-text">まずは、チームの目標達成について。今、チームで取り組むべきことは明確になっていて、実際に前へ進んでいる実感はありますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">🎯</span><span>目標が明確で、しっかり前に進んでいる</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>概ね分かっており、少しずつ進んでいる</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>目標はあるが進捗が遅い / 迷うことがある</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>目標自体がぼんやりしていて動きづらい</span><span class="score">20</span></div>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">Q2. 判断のスピード</div>
+          <div class="q-text">リーダーから出る判断のスピードや迷いの少なさはどうですか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">⚡</span><span>判断が速く、迷いなく動ける</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>概ね適切、特に困っていない</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>判断が遅い / 後で覆ることがある</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>判断が止まっていて動きづらい</span><span class="score">20</span></div>
+          </div>
+        </div>
+
+        <h3>活用 (強みの活用・適材適所)</h3>
+        <div class="question-block">
+          <div class="q-title">Q3. 自分の強みの発揮度</div>
+          <div class="q-text">仕事の中で、自分の得意なこと・強みを発揮できている実感はありますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">💪</span><span>とても活かせている</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>概ね活かせている</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>もっと活かせそうな気がする</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>全然活かせていない</span><span class="score">20</span></div>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">Q4. リーダーによる状況把握</div>
+          <div class="q-text">リーダーは、あなたの今の状況 (時間の余裕・やりたいこと・得意分野) を踏まえてアサインや関わり方を調整してくれていますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">🤝</span><span>よく見てくれていて、適切に調整されている</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>概ね把握されている</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>把握が浅く、表層的な調整に留まる</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>ほとんど把握されていない</span><span class="score">20</span></div>
+          </div>
+        </div>
+
+        <h3>伸張 (メンバーの育成)</h3>
+        <div class="question-block">
+          <div class="q-title">Q5. 自身の成長実感</div>
+          <div class="q-text">最近、新しいスキルや視点が身についた / 一段レベルアップした実感はありますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">🌱</span><span>明確に成長を感じる</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>少しずつ伸びている</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>停滞を感じる</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>成長機会がない</span><span class="score">20</span></div>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">Q6. リーダーの成長サポート</div>
+          <div class="q-text">挑戦の機会づくり、フィードバック、キャリアの相談など、後押ししてくれる関わりがありますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">🚀</span><span>意図的に機会を作ってくれている</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>求めれば応えてくれる</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>あまり機会・対話がない</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>成長を後押しされている感覚がない</span><span class="score">20</span></div>
+          </div>
+        </div>
+
+        <h3>連携 (他チーム・経営層との連携)</h3>
+        <div class="question-block">
+          <div class="q-title">Q7. チームと会社全体の連携度</div>
+          <div class="q-text">チームの動きが、他部署や会社全体の動きとうまく噛み合っている感覚はありますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">🤝</span><span>スムーズに連携できている</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>概ね問題ない</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>情報が降りてこないことがある</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>孤立している感覚がある</span><span class="score">20</span></div>
+          </div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">Q8. リーダーの橋渡し姿勢</div>
+          <div class="q-text">リーダーは、経営層・他チーム・自分の上司との情報共有や橋渡しを、能動的に行っていると感じますか?</div>
+          <div class="options">
+            <div class="option"><span class="emoji">📡</span><span>情報共有も巻き込みも積極的</span><span class="score">90</span></div>
+            <div class="option"><span class="emoji">🙂</span><span>必要なことはやってくれている</span><span class="score">70</span></div>
+            <div class="option"><span class="emoji">🤔</span><span>受け身で、こちらから引き出さないと動かない</span><span class="score">45</span></div>
+            <div class="option"><span class="emoji">😕</span><span>ほぼ機能していない</span><span class="score">20</span></div>
+          </div>
+        </div>
+
+        <hr />
+
+        <h3>自身のコンディション (エンゲージメント 4 観点)</h3>
+        <p class="lead">これはリーダー評価と一緒に取得し、メンバーごとに「コンディション一覧」として可視化されます。</p>
+
+        <details>
+          <summary>設問 4 問を見る</summary>
+
+          <div class="question-block">
+            <div class="q-title">帰属意識 (Loyalty)</div>
+            <div class="q-text">自分はこのチーム／組織に溶け込めていると思いますか?</div>
+            <div class="options">
+              <div class="option"><span class="emoji">❤️</span><span>とても思う</span><span class="score">90</span></div>
+              <div class="option"><span class="emoji">🙂</span><span>多少は思う</span><span class="score">70</span></div>
+              <div class="option"><span class="emoji">🤔</span><span>あまり思わない</span><span class="score">45</span></div>
+              <div class="option"><span class="emoji">😕</span><span>全く思わない</span><span class="score">20</span></div>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <div class="q-title">やりがい (Fulfillment)</div>
+            <div class="q-text">最近、日々の仕事の内容にやりがいや充実感を感じていますか?</div>
+            <div class="options">
+              <div class="option"><span class="emoji">✨</span><span>充実している</span><span class="score">90</span></div>
+              <div class="option"><span class="emoji">🙂</span><span>そこそこ満足</span><span class="score">70</span></div>
+              <div class="option"><span class="emoji">🤔</span><span>物足りない</span><span class="score">45</span></div>
+              <div class="option"><span class="emoji">😕</span><span>苦痛に感じる</span><span class="score">20</span></div>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <div class="q-title">風土 (Environment)</div>
+            <div class="q-text">率直に意見を言ったり、困った時に助けを求めたりしやすい空気を感じていますか?</div>
+            <div class="options">
+              <div class="option"><span class="emoji">🌟</span><span>とても言いやすい</span><span class="score">90</span></div>
+              <div class="option"><span class="emoji">🙂</span><span>概ね言える</span><span class="score">70</span></div>
+              <div class="option"><span class="emoji">🤔</span><span>ためらうことがある</span><span class="score">45</span></div>
+              <div class="option"><span class="emoji">😕</span><span>言いにくい</span><span class="score">20</span></div>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <div class="q-title">成果実感 (Achievement)</div>
+            <div class="q-text">直近 1 ヶ月のご自身の仕事について。結果や手応えが出せている実感はありますか?</div>
+            <div class="options">
+              <div class="option"><span class="emoji">💪</span><span>はっきり手応えがある</span><span class="score">90</span></div>
+              <div class="option"><span class="emoji">🙂</span><span>概ね出せている</span><span class="score">70</span></div>
+              <div class="option"><span class="emoji">🤔</span><span>物足りない / 自分でも分からない</span><span class="score">45</span></div>
+              <div class="option"><span class="emoji">😕</span><span>まったく出せていない</span><span class="score">20</span></div>
+            </div>
+          </div>
+        </details>
+
+        <div class="tip">
+          最後に任意で <strong>「リーダーへの一言」自由記述</strong> が入ります (「特になし」でスキップ可)。
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="leader">
+        <h2>6. リーダーの設問</h2>
+        <p class="lead">3 ブロック構成: 比重配分 → 4 軸自己評価 → チーム観察 3 問 → 自身のコンディション 4 問。</p>
+
+        <h3>① 比重配分 (執行 / 活用 / 伸張 / 連携)</h3>
+        <p>この 1 ヶ月、自分がどこに一番注力すべきだったか (100% を 4 軸に配分)。役員期待とのギャップを可視化するために使います。</p>
+
+        <h3>② 4 軸の自己評価 (5 段階)</h3>
+        <div class="question-block">
+          <div class="q-title">執行</div>
+          <div class="q-text">今期のチーム目標は明確に設定・共有できていますか? 既に走り出している場合はその達成に向けて、まだ設定中の場合は目標づくりそのものに、どのくらい手応えがありますか?</div>
+          <div class="q-text" style="color:var(--muted);font-size:12px">回答: 5 段階 (1=全く手応えない / 5=とても手応えあり)</div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">活用</div>
+          <div class="q-text">各メンバーのリソース (時間・余力)、意欲、能力を把握した上で、強みが発揮されるアサイン・関わり方ができている実感はありますか?</div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">伸張</div>
+          <div class="q-text">既存メンバーの育成と、チームに必要な人材の採用・登用の両面で、チームを一段引き上げる動きができている実感はありますか?</div>
+        </div>
+        <div class="question-block">
+          <div class="q-title">連携</div>
+          <div class="q-text">他チームや経営層、そしてご自身の上司との間で、必要な情報共有・相談・巻き込みを能動的に行えている実感はありますか?</div>
+        </div>
+
+        <h3>③ チーム観察 (subject=team_observation)</h3>
+        <p>メンバーの自己コンディション回答と対比するために、リーダーが「チーム全体を見た印象」を答える。</p>
+
+        <details>
+          <summary>3 問を見る</summary>
+
+          <div class="question-block">
+            <div class="q-title">帰属意識 (チーム全体)</div>
+            <div class="q-text">メンバーの会社・チームへのコミットは高いと感じますか?</div>
+            <div class="options">
+              <div class="option"><span class="emoji">❤️</span><span>高い</span><span class="score">85</span></div>
+              <div class="option"><span class="emoji">🙂</span><span>ふつう</span><span class="score">65</span></div>
+              <div class="option"><span class="emoji">🤔</span><span>少し低い</span><span class="score">45</span></div>
+              <div class="option"><span class="emoji">😕</span><span>低い・離反兆候あり</span><span class="score">25</span></div>
+            </div>
+          </div>
+
+          <div class="question-block">
+            <div class="q-title">やりがい (チーム全体)</div>
+            <div class="q-text">メンバーは仕事のやりがいを感じていそうですか?</div>
+          </div>
+
+          <div class="question-block">
+            <div class="q-title">風土 (チーム全体)</div>
+            <div class="q-text">率直に意見が出たり、助けを求められたりしやすい空気がチームにありますか?</div>
+          </div>
+        </details>
+
+        <h3>④ 自身のコンディション 4 問</h3>
+        <p>メンバーと同じ 4 問 (帰属意識 / やりがい / 風土 / 成果実感)。<strong>リーダーもメンバーコンディション一覧に一員として並びます</strong>。</p>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="executive">
+        <h2>7. 役員の設問</h2>
+        <p class="lead">役員は「軸スコア」ではなく<strong>「注力配分」</strong>を答える。</p>
+
+        <h3>① 配下リーダーへの期待ウェイト</h3>
+        <p>管掌下の各リーダーに対して個別に:</p>
+        <ul>
+          <li>「今月、このリーダーには 4 軸のどこにどれだけ注力してほしいか」を 100% で配分</li>
+          <li>例: 執行 40% / 活用 30% / 伸張 20% / 連携 10%</li>
+        </ul>
+        <p>この期待比重がマネジメントスコアの重みになります (§3 の式を参照)。</p>
+
+        <h3>② 役員自己評価</h3>
+        <ul>
+          <li>4 軸の自己評価</li>
+          <li>4 軸の自己比重配分 (自分がどこに注力しているか)</li>
+          <li>自身のコンディション 4 問</li>
+        </ul>
+
+        <div class="tip">
+          <strong>兼務役員 (諸岡さん / 小西さん):</strong> リーダー業務も兼ねている役員は<strong>「役員自己評価」だけを回答</strong>し、リーダー自己評価は生成されません (二重入力を避ける仕様)。ただし配下メンバーからの評価は正しく集計され、リーダーカードとして表示されます。
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="president">
+        <h2>8. 社長の設問</h2>
+        <p class="lead">社長は<strong>各役員に対して</strong>期待比重を配分する。</p>
+
+        <ul>
+          <li>「金 → 小西」「金 → 山口」... のように、管掌役員それぞれに 4 軸配分 (合計 100%)</li>
+          <li>役員レポートで「社長期待 vs 役員自身の比重」のギャップとして可視化される</li>
+        </ul>
+
+        <div class="tip">
+          <strong>役員→リーダー期待</strong>と <strong>社長→役員期待</strong> は同じ構造 (4 軸で 100% 配分)。目線が 1 段違うだけです。
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <section id="reports">
+        <h2>9. 画面と数字の対応</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>画面</th>
+              <th>見えるもの</th>
+              <th>誰が対象</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>/dashboard</strong> リーダー別スコア</td>
+              <td>加重総合スコア (0-100) + 4 段階ラベル + 配下メンバー数</td>
+              <td>リーダー (兼務役員は<strong>チーム別に別カード</strong>)</td>
+            </tr>
+            <tr>
+              <td><strong>/dashboard</strong> 月次スコアマトリックス</td>
+              <td>リーダー × 月 × 4 軸平均 (色帯)</td>
+              <td>過去 6 ヶ月分</td>
+            </tr>
+            <tr>
+              <td><strong>/dashboard</strong> メンバーコンディション一覧</td>
+              <td>メンバー × 月 × エンゲージメント 4 軸平均</td>
+              <td>全アクティブメンバー + リーダー自身</td>
+            </tr>
+            <tr>
+              <td><strong>/reports</strong> 全社サマリー</td>
+              <td>全社の集計 + リーダーごとの詳細カード</td>
+              <td>役員</td>
+            </tr>
+            <tr>
+              <td><strong>/reports</strong> 管掌範囲</td>
+              <td>自分が管掌するリーダーだけに絞った集計</td>
+              <td>役員</td>
+            </tr>
+            <tr>
+              <td><strong>/reports</strong> チーム別</td>
+              <td>チーム選択後、<strong>「注力配分 (役員期待 vs 本人)」</strong>のギャップも表示</td>
+              <td>役員</td>
+            </tr>
+            <tr>
+              <td><strong>役員ロールで /reports</strong></td>
+              <td>「社長期待 vs 役員自身の比重」+ 自己評価軸スコア</td>
+              <td>役員本人 / 社長</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>読み方のコツ</h3>
+        <ul>
+          <li><strong>加重総合が高い / 低い</strong>: そのリーダーが役員期待に沿った成果を出しているか</li>
+          <li><strong>4 軸バーの凸凹</strong>: どこが強く / どこが弱いか</li>
+          <li><strong>期待比重 vs 本人比重のギャップ</strong>: リーダーが役員の意図を理解しているか、期待と自己認識のズレ</li>
+          <li><strong>メンバー評価 vs リーダー自己評価のギャップ</strong>: 自己認識過剰 / 過小の傾向</li>
+          <li><strong>コンディションが 課題有 / 注意</strong>: 個別 1on1 のトリガー</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
